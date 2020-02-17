@@ -10,7 +10,7 @@ from sklearn.model_selection import cross_val_score, cross_validate
 
 def process_data(train_data, SVD):
     # bow vectorization
-    count_vectorizer = CountVectorizer(stop_words=ENGLISH_STOP_WORDS)
+    count_vectorizer = TfIdfVectorizer(stop_words=ENGLISH_STOP_WORDS)
     X = count_vectorizer.fit_transform(train_data['Content'])
 
     if SVD:
@@ -57,5 +57,4 @@ if __name__ == "__main__":
     train_data = pd.read_csv('../../datasets/q1/train.csv', sep=',')
     # train_data = train_data[:500]
 
-    SVM(train_data, SVD=True)
     SVM(train_data, SVD=False)

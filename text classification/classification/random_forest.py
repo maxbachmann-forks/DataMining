@@ -16,7 +16,7 @@ def process_data(train_data, SVD):
 
     if SVD:
         print('Using Singular Vector Decomposition...')
-        svd = TruncatedSVD(n_components=25, random_state=1)
+        svd = TruncatedSVD(n_components=100, random_state=1)
         X = svd.fit_transform(X)
 
     # Normalization
@@ -55,8 +55,8 @@ def random_forest(train_data, SVD):
 
 if __name__ == "__main__":
     # read train_set.csv
-    train_data = pd.read_csv('../../dataset/datasets/q1/train.csv', sep=',')
+    train_data = pd.read_csv('../../datasets/q1/train.csv', sep=',')
     # train_data = train_data[:500]
 
     random_forest(train_data, SVD=True)
-    # random_forest(train_data, SVD=False)
+    random_forest(train_data, SVD=False)

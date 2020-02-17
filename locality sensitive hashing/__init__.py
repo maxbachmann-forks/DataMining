@@ -194,8 +194,8 @@ if __name__ == "__main__":
     # train_data = train_data[:100000]
     # test_data = test_data[:2]
 
-    # lsh_jaccard(train=train_data, test=test_data, threshold=threshold, permutations=permutations)
+    lsh_jaccard(train=train_data, test=test_data, threshold=threshold, permutations=permutations)
 
     train_data, test_data = vectorize_data(train=train_data, test=test_data)
-    # exact_cosine(train=train_data, test=test_data, threshold=threshold)
-    lsh_cosine(train=train_data, test=test_data, threshold=threshold)
+    exact_cosine(train=train_data, test=test_data, threshold=threshold)
+    # lsh_cosine(train=train_data, test=test_data, threshold=threshold)

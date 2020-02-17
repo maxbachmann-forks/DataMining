@@ -57,3 +57,14 @@ k =  10
 	Query time:  4.220868110656738  seconds
 	Total time:  41.99072742462158  seconds
 	LSH Cosine Duplicates found:  795
+
+Build time:  529.3058850765228  seconds
+Query time:  79.08989357948303  seconds
+Total time:  608.3957786560059  seconds
+LSH Jaccard duplicates found: 5364
+
+5374 531990
+Build time: 0 seconds
+Query time:  7.217772722244263  seconds
+Total time:  7.217772722244263  seconds
+Exact Cosine duplicates found: 1728
