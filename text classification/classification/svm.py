@@ -11,7 +11,7 @@ from sklearn.model_selection import cross_val_score, cross_validate
 def process_data(train_data, SVD):
     # bow vectorization
     count_vectorizer = CountVectorizer(stop_words=ENGLISH_STOP_WORDS)
-    X = count_vectorizer.fit_transform(train_data['Content'])
+    X = count_vectorizer.fit_transform(train_data['Content'] + ' ' + train_data['Title'])
 
     if SVD:
         print('Using Singular Vector Decomposition...')

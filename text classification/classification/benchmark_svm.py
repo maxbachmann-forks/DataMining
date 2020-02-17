@@ -2,38 +2,18 @@ import pandas as pd
 import numpy as np
 from sklearn import preprocessing, svm
 from sklearn.decomposition import TruncatedSVD
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 from sklearn.model_selection import cross_val_score, cross_validate
+from sklearn.tree import DecisionTreeClassifier
 
 
-def process_data(train_data, SVD):
-    # bow vectorization
-    count_vectorizer = TfIdfVectorizer(stop_words=ENGLISH_STOP_WORDS)
-    X = count_vectorizer.fit_transform(train_data['Content'])
-
-    if SVD:
-        print('Using Singular Vector Decomposition...')
-        svd = TruncatedSVD(n_components=100, random_state=1)
-        X = svd.fit_transform(X)
-
-    # Normalization
-    normalizer = preprocessing.Normalizer()
-    X = normalizer.fit_transform(X)
-
-    # setting the labels array
-    le = preprocessing.LabelEncoder()
-    y = le.fit_transform(train_data["Label"])
-
-    return X, y
-
-
-def SVM(train_data, SVD):
-    X, y = process_data(train_data, SVD)
+def SVM_cross_val():
 
     # SVM classifier
-    clf = LinearSVC(random_state=0, tol=1e-5, C=0.1, loss='hinge', max_iter=20000)
+    clf = LinearSVC()
 
     # 5 fold cross validation
     print("Attempting 5-fold cross validation...")
@@ -46,15 +26,38 @@ def SVM(train_data, SVD):
 
     }
     scores = cross_validate(clf, X, y, cv=5, scoring=scoring, return_train_score=False, n_jobs=-1)
-    print('Accuracy:', np.mean(scores['test_acc']), scores['test_acc'])
-    print('Precision:', np.mean(scores['test_prec_macro']), scores['test_prec_macro'])
-    print('Recall:', np.mean(scores['test_rec_macro']), scores['test_rec_macro'])
-    print('F-Measure:', np.mean(scores['test_f1_macro']), scores['test_f1_macro'])
+    print('Accuracy:', np.mean(scores['test_acc']))
+    print('Precision:', np.mean(scores['test_prec_macro']))
+    print('Recall:', np.mean(scores['test_rec_macro']))
+    print('F-Measure:', np.mean(scores['test_f1_macro']))
+
+
+def SVM():
+
+    # train SVM
+    clf = LinearSVC()
+    clf.fit(X, y)
+
+    return clf.predict(X_test)
 
 
 if __name__ == "__main__":
+
     # read train_set.csv
     train_data = pd.read_csv('../../datasets/q1/train.csv', sep=',')
-    # train_data = train_data[:500]
+    test_data = pd.read_csv('../../datasets/q1/test_without_labels.csv', sep=',')
 
-    SVM(train_data, SVD=False)
+    # process data
+    tfidf_vectorizer = TfidfVectorizer(stop_words=ENGLISH_STOP_WORDS)
+    X = tfidf_vectorizer.fit_transform(10*(train_data['Title'] + ' ') + 2*(train_data['Content'] + ' '))
+    X_test = tfidf_vectorizer.transform(test_data['Title'] + ' ' + test_data['Content'])
+
+    # setting the labels array
+    le = preprocessing.LabelEncoder()
+    y = le.fit_transform(train_data["Label"])
+
+    # SVM_cross_val()
+
+    y_pred = SVM()
+    prediction = pd.DataFrame(data={"Predicted": le.inverse_transform(y_pred)}, index=test_data['Id'])
+    prediction.to_csv('testSet_categories.csv')
