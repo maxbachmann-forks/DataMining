@@ -12,11 +12,11 @@ from sklearn.model_selection import cross_val_score, cross_validate
 def process_data(train_data, SVD):
     # bow vectorization
     count_vectorizer = CountVectorizer(stop_words=ENGLISH_STOP_WORDS)
-    X = count_vectorizer.fit_transform(train_data['Content'])
+    X = count_vectorizer.fit_transform(train_data['Title'] + ' ' + train_data['Content'])
 
     if SVD:
         print('Using Singular Vector Decomposition...')
-        svd = TruncatedSVD(n_components=10, random_state=1)
+        svd = TruncatedSVD(n_components=100, random_state=1)
         X = svd.fit_transform(X)
 
     # Normalization
@@ -34,7 +34,7 @@ def random_forest(train_data, SVD):
     X, y = process_data(train_data, SVD)
 
     # SVM classifier
-    clf = RandomForestClassifier(n_estimators=10, max_features='auto',n_jobs=-1)
+    clf = RandomForestClassifier(n_estimators=50, max_features='auto')
 
     # 5 fold cross validation
     print("Attempting 5-fold cross validation...")
@@ -54,9 +54,8 @@ def random_forest(train_data, SVD):
 
 
 if __name__ == "__main__":
-
     # read train_set.csv
-    train_data = pd.read_csv('../../dataset/datasets/q1/train.csv', sep=',')
+    train_data = pd.read_csv('../../datasets/q1/train.csv', sep=',')
     # train_data = train_data[:500]
 
     random_forest(train_data, SVD=True)

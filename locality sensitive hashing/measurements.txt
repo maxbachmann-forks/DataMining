@@ -1,0 +1,70 @@
+k =  1
+	Build time:  45.29482650756836  seconds
+	Query time:  210.38148379325867  seconds
+	Total time:  255.67631030082703  seconds
+	LSH Cosine Duplicates found:  1566
+
+k =  2
+	Build time:  45.09958839416504  seconds
+	Query time:  75.26024198532104  seconds
+	Total time:  120.35983037948608  seconds
+	LSH Cosine Duplicates found:  1426
+
+k =  3
+	Build time:  37.14248824119568  seconds
+	Query time:  36.65069341659546  seconds
+	Total time:  73.79318165779114  seconds
+	LSH Cosine Duplicates found:  1348
+
+k =  4
+	Build time:  37.23013615608215  seconds
+	Query time:  20.303637504577637  seconds
+	Total time:  57.53377366065979  seconds
+	LSH Cosine Duplicates found:  1243
+
+k =  5
+	Build time:  39.80007791519165  seconds
+	Query time:  11.497323513031006  seconds
+	Total time:  51.297401428222656  seconds
+	LSH Cosine Duplicates found:  1100
+
+k =  6
+	Build time:  37.57043242454529  seconds
+	Query time:  7.422505855560303  seconds
+	Total time:  44.99293828010559  seconds
+	LSH Cosine Duplicates found:  1069
+
+k =  7
+	Build time:  37.64375019073486  seconds
+	Query time:  5.657949924468994  seconds
+	Total time:  43.30170011520386  seconds
+	LSH Cosine Duplicates found:  965
+
+k =  8
+	Build time:  37.75048613548279  seconds
+	Query time:  4.848443984985352  seconds
+	Total time:  42.59893012046814  seconds
+	LSH Cosine Duplicates found:  910
+
+k =  9
+	Build time:  37.74860143661499  seconds
+	Query time:  4.46830677986145  seconds
+	Total time:  42.21690821647644  seconds
+	LSH Cosine Duplicates found:  843
+
+k =  10
+	Build time:  37.769859313964844  seconds
+	Query time:  4.220868110656738  seconds
+	Total time:  41.99072742462158  seconds
+	LSH Cosine Duplicates found:  795
+
+Build time:  529.3058850765228  seconds
+Query time:  79.08989357948303  seconds
+Total time:  608.3957786560059  seconds
+LSH Jaccard duplicates found: 5364
+
+5374 531990
+Build time: 0 seconds
+Query time:  7.217772722244263  seconds
+Total time:  7.217772722244263  seconds
+Exact Cosine duplicates found: 1728

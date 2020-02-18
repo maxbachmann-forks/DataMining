@@ -11,11 +11,11 @@ from sklearn.model_selection import cross_val_score, cross_validate
 def process_data(train_data, SVD):
     # bow vectorization
     count_vectorizer = CountVectorizer(stop_words=ENGLISH_STOP_WORDS)
-    X = count_vectorizer.fit_transform(train_data['Content'])
+    X = count_vectorizer.fit_transform(train_data['Content'] + ' ' + train_data['Title'])
 
     if SVD:
         print('Using Singular Vector Decomposition...')
-        svd = TruncatedSVD(n_components=20, random_state=1)
+        svd = TruncatedSVD(n_components=100, random_state=1)
         X = svd.fit_transform(X)
 
     # Normalization
@@ -54,7 +54,7 @@ def SVM(train_data, SVD):
 
 if __name__ == "__main__":
     # read train_set.csv
-    train_data = pd.read_csv('../../dataset/datasets/q1/train.csv', sep=',')
+    train_data = pd.read_csv('../../datasets/q1/train.csv', sep=',')
     # train_data = train_data[:500]
 
     SVM(train_data, SVD=True)
