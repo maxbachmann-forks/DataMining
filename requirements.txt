@@ -4,3 +4,4 @@ numpy
 wordcloud
 sklearn
 datasketch
+fuzzywuzzy
