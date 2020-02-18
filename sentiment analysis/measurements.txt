@@ -1,0 +1,6 @@
+svm
+
+Accuracy: 0.88896
+Precision: 0.889103630183833
+Recall: 0.88896
+F-Measure: 0.8889498773927258
