@@ -56,8 +56,8 @@ if __name__ == "__main__":
     le = preprocessing.LabelEncoder()
     y = le.fit_transform(train_data["Label"])
 
-    # SVM_cross_val()
+    SVM_cross_val()
 
-    y_pred = SVM()
-    prediction = pd.DataFrame(data={"Predicted": le.inverse_transform(y_pred)}, index=test_data['Id'])
-    prediction.to_csv('testSet_categories.csv')
+    # y_pred = SVM()
+    # prediction = pd.DataFrame(data={"Predicted": le.inverse_transform(y_pred)}, index=test_data['Id'])
+    # prediction.to_csv('testSet_categories.csv')

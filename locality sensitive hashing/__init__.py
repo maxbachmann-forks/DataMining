@@ -41,11 +41,13 @@ def exact_jaccard(train, test):
     print('Build time: 0 seconds')
     print("Query time: ", query_end - query_start, ' seconds')
     print('Total time: ', query_end - query_start, ' seconds')
-    print("LSH Jaccard duplicates found:", duplicates)
+    print("Exact Jaccard duplicates found:", duplicates)
     print()
 
 
 def lsh_jaccard(train, test, threshold, permutations):
+
+    print('Permutations: ', permutations)
     build_start = time.time()
     lsh = MinHashLSH(threshold=threshold, num_perm=permutations)
 
@@ -59,7 +61,7 @@ def lsh_jaccard(train, test, threshold, permutations):
         index += 1
 
     build_end = time.time()
-    print('Build time: ', build_end - build_start, ' seconds')
+    print('\tBuild time: ', build_end - build_start, ' seconds')
 
     query_start = time.time()
     index = 0
@@ -70,13 +72,13 @@ def lsh_jaccard(train, test, threshold, permutations):
             x.update(word.encode('utf8'))
 
         result = lsh.query(x)
-        if len(lsh.query(x)) > 0:
+        if len(result) > 0:
             duplicates += 1
 
     query_end = time.time()
-    print("Query time: ", query_end - query_start, ' seconds')
-    print('Total time: ', (query_end - query_start) + (build_end - build_start), ' seconds')
-    print("LSH Jaccard duplicates found:", duplicates)
+    print("\tQuery time: ", query_end - query_start, ' seconds')
+    print('\tTotal time: ', (query_end - query_start) + (build_end - build_start), ' seconds')
+    print("\tLSH Jaccard duplicates found:", duplicates)
     print()
 
 
@@ -224,7 +226,7 @@ def lsh_cosine(train, test, threshold):
 
 if __name__ == "__main__":
     threshold = 0.8
-    permutations = 16
+    permutations = [16, 32, 64]
 
     # reading the train and test set
     train_data = pd.read_csv('../datasets/q2a/corpusTrain.csv', sep=',')
@@ -232,8 +234,9 @@ if __name__ == "__main__":
     # train_data = train_data[:100000]
     # test_data = test_data[:2]
 
-    exact_jaccard(train=train_data, test=test_data)
-    # lsh_jaccard(train=train_data, test=test_data, threshold=threshold, permutations=permutations)
+    # exact_jaccard(train=train_data, test=test_data)
+    for perm in permutations:
+        lsh_jaccard(train=train_data, test=test_data, threshold=threshold, permutations=perm)
 
     # train_data, test_data = vectorize_data(train=train_data, test=test_data)
     # exact_cosine(train=train_data, test=test_data, threshold=threshold)
