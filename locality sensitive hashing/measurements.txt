@@ -1,3 +1,8 @@
+Build time: 0 seconds
+Query time:  7.217772722244263  seconds
+Total time:  7.217772722244263  seconds
+Exact Cosine duplicates found: 1728
+
 k =  1
 	Build time:  45.29482650756836  seconds
 	Query time:  210.38148379325867  seconds
@@ -58,13 +63,25 @@ k =  10
 	Total time:  41.99072742462158  seconds
 	LSH Cosine Duplicates found:  795
 
-Build time:  529.3058850765228  seconds
-Query time:  79.08989357948303  seconds
-Total time:  608.3957786560059  seconds
-LSH Jaccard duplicates found: 5364
-
-5374 531990
 Build time: 0 seconds
-Query time:  7.217772722244263  seconds
-Total time:  7.217772722244263  seconds
-Exact Cosine duplicates found: 1728
+Query time:  8260.679905653  seconds
+Total time:  8260.679905653  seconds
+Exact Jaccard duplicates found: 4107
+
+Permutations:  16
+	Build time:  541.9222981929779  seconds
+	Query time:  81.06455612182617  seconds
+	Total time:  622.9868543148041  seconds
+	LSH Jaccard duplicates found: 5364
+
+Permutations:  32
+	Build time:  707.5407454967499  seconds
+	Query time:  56.812742471694946  seconds
+	Total time:  764.3534879684448  seconds
+	LSH Jaccard duplicates found: 5362
+
+Permutations:  64
+	Build time:  933.8820056915283  seconds
+	Query time:  77.0412986278534  seconds
+	Total time:  1010.9233043193817  seconds
+	LSH Jaccard duplicates found: 5365

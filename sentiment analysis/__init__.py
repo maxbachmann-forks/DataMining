@@ -44,13 +44,13 @@ def SVM():
 if __name__ == "__main__":
 
     # read train_set.csv
-    train_data = pd.read_csv('../../datasets/q1/train.csv', sep=',')
-    test_data = pd.read_csv('../../datasets/q1/test_without_labels.csv', sep=',')
+    train_data = pd.read_csv('../datasets/q3/train.csv', sep=',')
+    test_data = pd.read_csv('../datasets/q3/test_without_labels.csv', sep=',')
 
     # process data
     tfidf_vectorizer = TfidfVectorizer(stop_words=ENGLISH_STOP_WORDS)
-    X = tfidf_vectorizer.fit_transform(10*(train_data['Title'] + ' ') + 2*(train_data['Content'] + ' '))
-    X_test = tfidf_vectorizer.transform(test_data['Title'] + ' ' + test_data['Content'])
+    X = tfidf_vectorizer.fit_transform(train_data['Content'])
+    X_test = tfidf_vectorizer.transform(test_data['Content'])
 
     # setting the labels array
     le = preprocessing.LabelEncoder()
@@ -58,6 +58,6 @@ if __name__ == "__main__":
 
     SVM_cross_val()
 
-    # y_pred = SVM()
-    # prediction = pd.DataFrame(data={"Predicted": le.inverse_transform(y_pred)}, index=test_data['Id'])
-    # prediction.to_csv('testSet_categories.csv')
+    y_pred = SVM()
+    prediction = pd.DataFrame(data={"Predicted": y_pred}, index=test_data['Id'])
+    prediction.to_csv('sentiment_predictions.csv')

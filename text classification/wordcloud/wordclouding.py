@@ -9,7 +9,7 @@ from wordcloud import WordCloud, STOPWORDS
 
 def create_wordcloud(df, currentDir, label, stopwordsList, imgMask):
     data = df.loc[df['Label'] == label]
-    content = 5*data['Title'] + data['Content']
+    content = 5*(data['Title'] + ' ') + data['Content']
 
     # generating wordcloud
     wc = WordCloud(background_color='black', mask=imgMask, stopwords=stopwordsList, max_words=250)
@@ -21,17 +21,19 @@ def create_wordcloud(df, currentDir, label, stopwordsList, imgMask):
 if __name__ == "__main__":
 
     # read train_set.csv
-    train_set = pd.read_csv('../dataset/datasets/q1/train.csv', sep=',')
+    train_set = pd.read_csv('../../datasets/q1/train.csv', sep=',')
 
     # current directory path
-    currentDir = os.path.dirname(__file__);
+    currentDir = os.path.dirname(__file__)
 
     # set stopwords and mask
     stopwords = set(STOPWORDS)
     stopwords.update(['says'], ['talk'], ['open'],
                      ['take'], ['see'], ['will'],
                      ['may'], ['new'], ['make'],
-                     ['now'], ['said'], ['one'])
+                     ['now'], ['said'], ['one'],
+                     ['year'], ['old'], ['even'],
+                     ['well'], ['last'])
 
     mask = np.array(Image.open(path.join(currentDir, "batman-mask.jpg")))
 

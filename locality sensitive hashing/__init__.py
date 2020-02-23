@@ -9,15 +9,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from tqdm import tqdm
 
-def vectorize_data(train, test):
-    stop_words = stopwords.words('english')
-    vectorizer = TfidfVectorizer(stop_words=stop_words)
-    train = vectorizer.fit_transform(train['Content'])
-    test = vectorizer.transform(test['Content'])
+"""
+jaccard lsh & exact
+"""
 
-    return train, test
 
-def jaccard_score(q1,q2):
+def jaccard_score(q1, q2):
     try:
         q1 = set(q1.split())
         q2 = set(q2.split())
@@ -31,8 +28,75 @@ def jaccard_score(q1,q2):
         return 0.0
 
 
-def exact_cosine(train, test, threshold):
+def exact_jaccard(train, test):
+    duplicates = 0
 
+    query_start = time.time()
+    for q1 in test['Content']:
+        for q2 in train['Content']:
+            if (jaccard_score(q1, q2)) > threshold:
+                duplicates += 1
+
+    query_end = time.time()
+    print('Build time: 0 seconds')
+    print("Query time: ", query_end - query_start, ' seconds')
+    print('Total time: ', query_end - query_start, ' seconds')
+    print("Exact Jaccard duplicates found:", duplicates)
+    print()
+
+
+def lsh_jaccard(train, test, threshold, permutations):
+
+    print('Permutations: ', permutations)
+    build_start = time.time()
+    lsh = MinHashLSH(threshold=threshold, num_perm=permutations)
+
+    index = 0
+    for row in train['Content']:
+        x = MinHash(num_perm=permutations)
+        for word in row:
+            x.update(word.encode('utf8'))
+
+        lsh.insert(index, x)
+        index += 1
+
+    build_end = time.time()
+    print('\tBuild time: ', build_end - build_start, ' seconds')
+
+    query_start = time.time()
+    index = 0
+    duplicates = 0
+    for row in test['Content']:
+        x = MinHash(num_perm=permutations)
+        for word in row:
+            x.update(word.encode('utf8'))
+
+        result = lsh.query(x)
+        if len(result) > 0:
+            duplicates += 1
+
+    query_end = time.time()
+    print("\tQuery time: ", query_end - query_start, ' seconds')
+    print('\tTotal time: ', (query_end - query_start) + (build_end - build_start), ' seconds')
+    print("\tLSH Jaccard duplicates found:", duplicates)
+    print()
+
+
+"""
+cosine lsh & exact
+"""
+
+
+def vectorize_data(train, test):
+    stop_words = stopwords.words('english')
+    vectorizer = TfidfVectorizer(stop_words=stop_words)
+    train = vectorizer.fit_transform(train['Content'])
+    test = vectorizer.transform(test['Content'])
+
+    return train, test
+
+
+def exact_cosine(train, test, threshold):
     query_start = time.time()
     similarity = cosine_similarity(test, train, dense_output=False)
     x, y = similarity.get_shape()
@@ -52,56 +116,8 @@ def exact_cosine(train, test, threshold):
     print('Total time: ', query_end - query_start, ' seconds')
     print('Exact Cosine duplicates found:', duplicates)
 
-def exact_jaccard(train, test):
-
-    duplicates=0
-
-    for q1 in tqdm(test['Content']):
-        for q2 in train['Content']:
-            if  (jaccard_score(q1,q2)) > 0.8:
-                duplicates+=1
-
-    print('Exact Jaccard Duplicates:', duplicates)
-
-
-def lsh_jaccard(train, test, threshold, permutations):
-
-    build_start = time.time()
-    lsh = MinHashLSH(threshold=threshold, num_perm=permutations)
-
-    index = 0
-    for row in train['Content']:
-        x = MinHash(num_perm=permutations)
-        for word in row:
-            x.update(word.encode('utf8'))
-
-        lsh.insert(index, x)
-        index += 1
-
-    build_end = time.time()
-    print('Build time: ', build_end - build_start, ' seconds')
-
-    query_start = time.time()
-    index = 0
-    duplicates = 0
-    for row in test['Content']:
-        x = MinHash(num_perm=permutations)
-        for word in row:
-            x.update(word.encode('utf8'))
-
-        result = lsh.query(x)
-        if len(lsh.query(x)) > 0:
-            duplicates += 1
-
-    query_end = time.time()
-    print("Query time: ", query_end - query_start, ' seconds')
-    print('Total time: ', (query_end - query_start) + (build_end - build_start), ' seconds')
-    print("LSH Jaccard duplicates found:", duplicates)
-    print()
-
 
 def lsh_cosine(train, test, threshold):
-
     def generate_hyperplanes(dim, k):
         """
         :param dim: number of features
@@ -210,7 +226,7 @@ def lsh_cosine(train, test, threshold):
 
 if __name__ == "__main__":
     threshold = 0.8
-    permutations = 16
+    permutations = [16, 32, 64]
 
     # reading the train and test set
     train_data = pd.read_csv('../datasets/q2a/corpusTrain.csv', sep=',')
@@ -218,13 +234,10 @@ if __name__ == "__main__":
     # train_data = train_data[:100000]
     # test_data = test_data[:2]
 
-    train_split = train_data
-    test_split = test_data
+    # exact_jaccard(train=train_data, test=test_data)
+    for perm in permutations:
+        lsh_jaccard(train=train_data, test=test_data, threshold=threshold, permutations=perm)
 
-    lsh_jaccard(train=train_data, test=test_data, threshold=threshold, permutations=permutations)
-
-    train_data, test_data = vectorize_data(train=train_data, test=test_data)
-    exact_cosine(train=train_data, test=test_data, threshold=threshold)
+    # train_data, test_data = vectorize_data(train=train_data, test=test_data)
+    # exact_cosine(train=train_data, test=test_data, threshold=threshold)
     # lsh_cosine(train=train_data, test=test_data, threshold=threshold)
-    exact_jaccard(train_split, test_split)
-
