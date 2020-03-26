@@ -1,5 +1,5 @@
 import pandas as pd
-from fuzzywuzzy import fuzz
+from rapidfuzz import fuzz
 from tqdm import tqdm
 
 
